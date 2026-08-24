@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Roman Linev — builder, maker, thinker">
+  <title>Roman Linev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="orb orb--1"></div>
+  <div class="orb orb--2"></div>
+  <div class="orb orb--3"></div>
+  <div class="bg-pattern">
+    <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="dot-grad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="currentColor" stop-opacity="1"/>
+          <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <g class="dots-group">
+        <circle class="dot dot--1" cx="100" cy="150" r="2" fill="url(#dot-grad)"/>
+        <circle class="dot dot--2" cx="300" cy="100" r="1.5" fill="url(#dot-grad)"/>
+        <circle class="dot dot--3" cx="500" cy="200" r="2.5" fill="url(#dot-grad)"/>
+        <circle class="dot dot--4" cx="700" cy="150" r="1.5" fill="url(#dot-grad)"/>
+        <circle class="dot dot--5" cx="200" cy="400" r="2" fill="url(#dot-grad)"/>
+        <circle class="dot dot--6" cx="450" cy="350" r="1.5" fill="url(#dot-grad)"/>
+        <circle class="dot dot--7" cx="650" cy="450" r="2.5" fill="url(#dot-grad)"/>
+        <circle class="dot dot--8" cx="150" cy="600" r="1.5" fill="url(#dot-grad)"/>
+        <circle class="dot dot--9" cx="400" cy="650" r="2" fill="url(#dot-grad)"/>
+        <circle class="dot dot--10" cx="600" cy="700" r="1.5" fill="url(#dot-grad)"/>
+        <circle class="dot dot--11" cx="350" cy="500" r="2" fill="url(#dot-grad)"/>
+        <circle class="dot dot--12" cx="550" cy="300" r="1.5" fill="url(#dot-grad)"/>
+      </g>
+    </svg>
+  </div>
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="easter-egg" id="easterEgg">
+    <div class="easter-egg__content">
+      <pre class="easter-egg__art" id="catArt"></pre>
+      <p class="easter-egg__text">Konami code activated. You found the cat.</p>
+    </div>
+  </div>
+  <div class="grain"></div>
+
+  <script>
+    const glow = document.getElementById('cursorGlow');
+    let targetX = 0, targetY = 0;
+    let currentX = 0, currentY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    });
+
+    function animate() {
+      currentX += (targetX - currentX) * 0.08;
+      currentY += (targetY - currentY) * 0.08;
+      glow.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    const links = document.querySelectorAll('.link');
+    links.forEach(link => {
+      link.addEventListener('pointerdown', () => {
+        if (navigator.vibrate) {
+          navigator.vibrate(10);
+        }
+      });
+    });
+
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiIndex = 0;
+    const easterEgg = document.getElementById('easterEgg');
+
+    const catArt = `
+ /\\\\_____/\\\\
+ /  o   o  \\\\
+( ==  ^  == )
+ )         (
+(           )
+( (  ) (  ) )
+(__(__)__(__))
+    `;
+
+    document.addEventListener('keydown', (e) => {
+      const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      if (key === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+          activateEasterEgg();
+          konamiIndex = 0;
+        }
+      } else {
+        konamiIndex = 0;
+      }
+    });
+
+    function activateEasterEgg() {
+      document.getElementById('catArt').textContent = catArt;
+      easterEgg.classList.add('easter-egg--active');
+      if (navigator.vibrate) {
+        navigator.vibrate([10, 50, 10, 50, 20]);
+      }
+      setTimeout(() => {
+        easterEgg.classList.remove('easter-egg--active');
+      }, 4000);
+    }
+
+    easterEgg.addEventListener('click', () => {
+      easterEgg.classList.remove('easter-egg--active');
+    });
+
+    console.log('%c Hey there, fellow developer!', 'font-size: 20px; font-weight: bold; color: #7C3AED;');
+    console.log('%cLooking for something fun? Try the Konami code: \u2191 \u2191 \u2193 \u2193 \u2190 \u2192 \u2190 \u2192 B A', 'font-size: 14px; color: #888;');
+    console.log('%c\u2014 Roman', 'font-size: 12px; font-style: italic; color: #666;');
+  </script>
+
+  <main class="container">
+    <header class="header">
+      <h1 class="name">Roman Linev</h1>
+      <p class="tagline">builder, maker, tinkerer</p>
+    </header>
+
+    <nav class="links" aria-label="Social links">
+      <a href="https://t.me/rlinev" class="link" target="_blank" rel="noopener noreferrer">
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.492-1.302.48-.428-.013-1.252-.242-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+        </svg>
+        <span>Telegram</span>
+        <span class="arrow">&#8599;</span>
+      </a>
+
+      <a href="https://x.com/rlinev" class="link" target="_blank" rel="noopener noreferrer">
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+        <span>x.com</span>
+        <span class="arrow">&#8599;</span>
+      </a>
+
+      <a href="https://github.com/angelwzr" class="link" target="_blank" rel="noopener noreferrer">
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <span>GitHub</span>
+        <span class="arrow">&#8599;</span>
+      </a>
+    </nav>
+
+    <footer class="interests">
+      <span class="interest">AI</span>
+      <span class="interest">3D Printing</span>
+      <span class="interest">Laser Cutting</span>
+      <span class="interest">Retro Gaming</span>
+      <span class="interest">Cats</span>
+      <span class="interest">Blogging</span>
+      <span class="interest">Tech</span>
+    </footer>
+  </main>
+</body>
+</html>
